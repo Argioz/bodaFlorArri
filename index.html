@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nuestra Boda | F & A</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="intro-screen">
+        <div class="envelope">
+            <div class="envelope-flap" id="flap"></div>
+            <div class="envelope-body">
+                <h1 class="initials">F & A</h1>
+                <button id="btn-open" class="btn-primary">Abrir</button>
+            </div>
+        </div>
+    </div>
+
+    <button id="btn-music" class="music-floating" aria-label="Reproducir música">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-play">
+            <path d="M9 18V5l12-2v13"></path>
+            <circle cx="6" cy="18" r="3"></circle>
+            <circle cx="18" cy="16" r="3"></circle>
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-pause" style="display:none;">
+            <rect x="6" y="4" width="4" height="16"></rect>
+            <rect x="14" y="4" width="4" height="16"></rect>
+        </svg>
+    </button>
+    <audio id="bg-music" loop>
+        <source src="music/song.mp3" type="audio/mpeg">
+    </audio>
+
+    <main id="main-content">
+        
+        <section id="hero" class="section-fullscreen">
+            <div class="hero-content animate-on-scroll fade-up">
+                <p class="subtitle">Nos casamos</p>
+                <h2 class="names">Flor & Arri</h2>
+                <p class="date">03 · Abril · 2026</p>
+            </div>
+
+        <div class="carousel-container animate-on-scroll fade-up">
+            <div class="carousel-native" id="carousel-hero">
+                <img src="images/foto1.jpg" alt="Foto pareja 1">
+                <img src="images/foto2.jpg" alt="Foto pareja 2">
+                <img src="images/foto3.jpg" alt="Foto pareja 3">
+            </div>
+            <div class="carousel-controls">
+                <button class="prev" onclick="moveCarousel('carousel-hero', -1)" aria-label="Anterior">&#10094;</button>
+                <button class="next" onclick="moveCarousel('carousel-hero', 1)" aria-label="Siguiente">&#10095;</button>
+            </div>
+        </div>
+
+            <div class="countdown animate-on-scroll fade-up">
+                <div class="time-box"><span id="days">00</span><p>Días</p></div>
+                <div class="time-box"><span id="hours">00</span><p>Hs</p></div>
+                <div class="time-box"><span id="minutes">00</span><p>Min</p></div>
+                <div class="time-box"><span id="seconds">00</span><p>Seg</p></div>
+            </div>
+        </section>
+
+        <section id="details" class="section-fullscreen bg-alt">
+            <div class="content-wrapper animate-on-scroll fade-up">
+                <h3 class="section-title">La Celebración</h3>
+                <p class="event-time">Sábado 3 de Abril, 18:00 hs.</p>
+                <p class="event-location">Estancia La Romántica, Valle Hermoso</p>
+                
+                <div class="map-container">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3350.7573913340643!2d-68.76347362371853!3d-32.87813787362156!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x967e0e582812526d%3A0x723793471ff46099!2sQuinta%20la%20bancaria!5e0!3m2!1ses!2sar!4v1775693650528!5m2!1ses!2sar" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+
+                <div class="button-group">
+                    <a href="https://maps.app.goo.gl/sA1mq7ZxMUycqm6x6" target="_blank" class="btn-outline">Abrir en Maps</a>
+                    <button id="btn-copy" class="btn-outline" data-url="Estancia La Romántica, Valle Hermoso">Copiar dirección</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="dress-code" class="section-fullscreen">
+            <div class="content-wrapper animate-on-scroll fade-up">
+                <h3 class="section-title">Dress Code</h3>
+                <p class="dress-text">Elegante o Elegante Sport</p>
+                <p class="dress-subtext">Te sugerimos utilizar ropa cómoda y evitar el color blanco.</p>
+
+                <div class="dress-examples">
+                    <h4 class="carousel-title">Ellas</h4>
+                    <div class="carousel-container animate-on-scroll fade-up">
+                        <div class="carousel-native"  id="carousel-ellas">
+                            <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=400&q=80" alt="Ejemplo vestido 1">
+                            <img src="https://images.unsplash.com/photo-1566737236500-c8ac43014a67?auto=format&fit=crop&w=400&q=80" alt="Ejemplo vestido 2">
+                            <img src="https://images.unsplash.com/photo-1572804013309-82a89b47afc2?auto=format&fit=crop&w=400&q=80" alt="Ejemplo vestido 3">
+                        </div>
+                                    <div class="carousel-controls">
+                <button class="prev" onclick="moveCarousel('carousel-ellas', -1)" aria-label="Anterior">&#10094;</button>
+                <button class="next" onclick="moveCarousel('carousel-ellas', 1)" aria-label="Siguiente">&#10095;</button>
+            </div>
+                    </div>
+
+                    <h4 class="carousel-title">Ellos</h4>
+                    <div class="carousel-container animate-on-scroll fade-up">
+                        <div class="carousel-native" id="carousel-ellos">
+                            <img src="https://images.unsplash.com/photo-1594938298593-c53f86151547?auto=format&fit=crop&w=400&q=80" alt="Ejemplo traje 1">
+                            <img src="https://images.unsplash.com/photo-1592878904946-b3cd8ae243d0?auto=format&fit=crop&w=400&q=80" alt="Ejemplo traje 2">
+                            <img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=400&q=80" alt="Ejemplo traje 3">
+                        </div>
+
+                                    <div class="carousel-controls">
+                <button class="prev" onclick="moveCarousel('carousel-ellos', -1)" aria-label="Anterior">&#10094;</button>
+                <button class="next" onclick="moveCarousel('carousel-ellos', 1)" aria-label="Siguiente">&#10095;</button>
+            </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="gifts" class="section-fullscreen bg-alt">
+            <div class="content-wrapper animate-on-scroll fade-up">
+                <h3 class="section-title">Regalos</h3>
+                <p class="gift-text">Tu presencia es nuestro mayor regalo.</p>
+                <p class="gift-text">Si deseás ayudarnos con nuestro festejo, podés hacerlo a través de:</p>
+                
+                <div class="bank-details">
+                    <p><strong>Alias:</strong> arrigo.mp</p>
+                    <p><strong>CBU:</strong> 0000000000000000000000</p>
+                    <p><strong>A nombre de:</strong> Arrigo Dario Zanaboni Di Batista</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="closing" class="section-fullscreen">
+            <div class="content-wrapper animate-on-scroll scale-fade">
+                <h2 class="final-title">¡Te esperamos!</h2>
+                <p class="final-subtitle">Flor & Arri</p>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

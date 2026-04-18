@@ -63,29 +63,33 @@
                 <div class="time-box"><span id="minutes">00</span><p>Min</p></div>
                 <div class="time-box"><span id="seconds">00</span><p>Seg</p></div>
             </div>
+
+            <button id="btn-scroll-down" class="scroll-down" aria-label="Bajar a la siguiente sección"></button>
         </section>
 
         <section id="details" class="section-fullscreen bg-alt">
             <div class="content-wrapper animate-on-scroll fade-up">
-                <h3 class="section-title">La Celebración</h3>
-                <p class="event-time">Sábado 3 de Abril, 18:00 hs.</p>
-                <p class="event-location">Estancia La Romántica, Valle Hermoso</p>
+                <h3 class="section-title">La celebración</h3>
+                <p class="event-time">Sábado 3 de Abril, 18:30 hs.</p>
+                <p class="event-location">Quinta La Bancaria, Guaymallén</p>
                 
                 <div class="map-container">
                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3350.7573913340643!2d-68.76347362371853!3d-32.87813787362156!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x967e0e582812526d%3A0x723793471ff46099!2sQuinta%20la%20bancaria!5e0!3m2!1ses!2sar!4v1775693650528!5m2!1ses!2sar" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                 </div>
 
                 <div class="button-group">
-                    <a href="https://maps.app.goo.gl/sA1mq7ZxMUycqm6x6" target="_blank" class="btn-outline">Abrir en Maps</a>
+                    <a href="https://maps.app.goo.gl/sA1mq7ZxMUycqm6x6" target="_blank" rel="noopener noreferrer" class="btn-outline">Abrir en Maps</a>
                     <button id="btn-copy" class="btn-outline" data-url="Estancia La Romántica, Valle Hermoso">Copiar dirección</button>
                 </div>
             </div>
+
+            <button class="scroll-down" aria-label="Bajar a la siguiente sección"></button>
         </section>
 
         <section id="dress-code" class="section-fullscreen">
             <div class="content-wrapper animate-on-scroll fade-up">
                 <h3 class="section-title">Dress Code</h3>
-                <p class="dress-text">Elegante o Elegante Sport</p>
+                <p class="dress-text">Elegante Sport</p>
                 <p class="dress-subtext">Te sugerimos utilizar ropa cómoda y evitar el color blanco.</p>
 
                 <div class="dress-examples">
@@ -105,8 +109,8 @@
                     <h4 class="carousel-title">Ellos</h4>
                     <div class="carousel-container animate-on-scroll fade-up">
                         <div class="carousel-native" id="carousel-ellos">
-                            <img src="https://images.unsplash.com/photo-1594938298593-c53f86151547?auto=format&fit=crop&w=400&q=80" alt="Ejemplo traje 1">
                             <img src="https://images.unsplash.com/photo-1592878904946-b3cd8ae243d0?auto=format&fit=crop&w=400&q=80" alt="Ejemplo traje 2">
+                            <img src="https://images.unsplash.com/photo-1594938298593-c53f86151547?auto=format&fit=crop&w=400&q=80" alt="Ejemplo traje 1">
                             <img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=400&q=80" alt="Ejemplo traje 3">
                         </div>
 
@@ -117,13 +121,63 @@
                     </div>
                 </div>
             </div>
+            <button class="scroll-down" aria-label="Bajar a la siguiente sección"></button>
         </section>
 
-        <section id="gifts" class="section-fullscreen bg-alt">
+        <section id="schedule" class="section-fullscreen bg-alt">
+            <div class="content-wrapper animate-on-scroll fade-up">
+                <h3 class="section-title">Cronograma</h3>
+                <p class="event-subtitle">Un vistazo al flujo de nuestro día.</p>
+
+                <div class="timeline-container">
+                    <div class="timeline-line"></div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-card">
+                            <span class="timeline-date">18:30</span>
+                            <h4 class="timeline-title">Recepción</h4>
+                            <p>Apertura de puertas para invitados y bienvenida.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-card">
+                            <span class="timeline-date">19:30</span>
+                            <h4 class="timeline-title">Ceremonia</h4>
+                            <p>Comienzo de la ceremonia en el jardín principal.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-card">
+                            <span class="timeline-date">20:00</span>
+                            <h4 class="timeline-title">Cena y brindis</h4>
+                            <p>Palabras, menú especial y brindis con todos los invitados.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-card">
+                            <span class="timeline-date">23:00</span>
+                            <h4 class="timeline-title">Fiesta</h4>
+                            <p>Baile, música y celebración hasta entrada la noche.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="scroll-down" aria-label="Bajar a la siguiente sección"></button>
+        </section>
+
+        <section id="gifts" class="section-fullscreen">
             <div class="content-wrapper animate-on-scroll fade-up">
                 <h3 class="section-title">Regalos</h3>
                 <p class="gift-text">Tu presencia es nuestro mayor regalo.</p>
-                <p class="gift-text">Si deseás ayudarnos con nuestro festejo, podés hacerlo a través de:</p>
+                <p class="gift-text">Si deseás ayudarnos con nuestro festejo el valor sugerido por tarjeta es de $70.000.</p>
+                <p class="gift-text">Podés transferirnos a través de:</p>
                 
                 <div class="bank-details">
                     <p><strong>Alias:</strong> arrigo.mp</p>
@@ -131,6 +185,28 @@
                     <p><strong>A nombre de:</strong> Arrigo Dario Zanaboni Di Batista</p>
                 </div>
             </div>
+            <button class="scroll-down" aria-label="Bajar a la siguiente sección"></button>
+        </section>
+
+        <section id="attendance" class="section-fullscreen bg-alt">
+            <div class="content-wrapper animate-on-scroll fade-up">
+                <h3 class="section-title">Asistencia</h3>
+
+                <div class="attendance-card">
+                    <p class="event-subtitle">Por favor, confirmanos tu asistencia en este formulario antes del 01/02/2027</p>
+                    <div class="attendance-buttons">
+                        <a href="https://forms.gle/TqNTqGzJ5xkQ1w5S7" target="_blank" class="btn-primary">Confirmar Asistencia</a>
+                    </div>
+                </div>
+
+                <div class="attendance-card">
+                    <p class="event-subtitle">Si querés, podés agendar el evento para no olvidarlo.</p>
+                    <div class="attendance-buttons">
+                        <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Boda+Flor+%26+Arri&dates=20270403T183000/20270403T235900&ctz=America/Argentina/Buenos_Aires&details=No+olvides+confirmar+tu+asistencia+en+el+formulario+y+guarda+el+evento+en+tu+calendario.&location=Quinta+La+Bancaria%2C+Guaymall%C3%A9n&trp=false" target="_blank" class="btn-primary">Agendar evento</a>
+                    </div>
+                </div>
+            </div>
+            <button class="scroll-down" aria-label="Bajar a la siguiente sección"></button>
         </section>
 
         <section id="closing" class="section-fullscreen">

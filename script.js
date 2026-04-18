@@ -94,6 +94,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const iconPause = btnMusic.querySelector('.icon-pause');
     let isPlaying = false;
 
+    document.querySelectorAll('.scroll-down').forEach(button => {
+        button.addEventListener('click', () => {
+            const currentSection = button.closest('section');
+            if (!currentSection) return;
+            const nextSection = currentSection.nextElementSibling;
+            if (nextSection && nextSection.tagName.toLowerCase() === 'section') {
+                smoothScrollTo(nextSection, 1200);
+            }
+        });
+    });
+
     btnMusic.addEventListener('click', () => {
         if (isPlaying) {
             bgMusic.pause();
@@ -108,7 +119,29 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-    /* Añadir esta función al final de script.js para manejar el movimiento */
+function smoothScrollTo(target, duration) {
+    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset;
+    const startPosition = window.pageYOffset;
+    const distance = targetPosition - startPosition;
+    const startTime = performance.now();
+
+    function easeInOutQuad(t) {
+        return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+    }
+
+    function animation(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const ease = easeInOutQuad(progress);
+        window.scrollTo(0, startPosition + distance * ease);
+        if (elapsed < duration) {
+            requestAnimationFrame(animation);
+        }
+    }
+
+    requestAnimationFrame(animation);
+}
+
 function moveCarousel(id, direction) {
     const container = document.getElementById(id);
     const scrollAmount = container.clientWidth;

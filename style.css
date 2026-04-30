@@ -229,7 +229,7 @@ body {
 .timeline-item {
     position: relative;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 18px;
     margin-bottom: 24px;
 }
@@ -242,7 +242,6 @@ body {
     border: 3px solid var(--accent-color);
     box-shadow: 0 0 0 6px rgba(200, 155, 123, 0.12);
     flex-shrink: 0;
-    margin-top: 4px;
 }
 
 .timeline-card {
@@ -250,7 +249,7 @@ body {
     border: 1px solid rgba(0, 0, 0, 0.06);
     border-radius: 20px;
     padding: 20px;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
     text-align: left;
 }
 

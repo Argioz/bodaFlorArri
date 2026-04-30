@@ -117,6 +117,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         isPlaying = !isPlaying;
     });
+
+    const easterEggTitle = document.getElementById('easter-egg-title');
+    let easterEggClicks = 0;
+    const easterEggTarget = 7;
+    const easterEggUrl = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ';
+
+    if (easterEggTitle) {
+        easterEggTitle.style.cursor = 'pointer';
+        easterEggTitle.title = 'Haz clic aquí 7 veces';
+        easterEggTitle.addEventListener('click', () => {
+            easterEggClicks += 1;
+            if (easterEggClicks === easterEggTarget) {
+                window.open(easterEggUrl, '_blank');
+                easterEggClicks = 0;
+            }
+        });
+    }
 });
 
 function smoothScrollTo(target, duration) {

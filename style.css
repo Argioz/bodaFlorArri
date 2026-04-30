@@ -422,6 +422,33 @@ body {
     scroll-snap-align: center;
 }
 
+#carousel-hero img {
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+}
+
+#carousel-hero img.active {
+    opacity: 1;
+}
+
+#carousel-ellas img {
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+}
+
+#carousel-ellas img.active {
+    opacity: 1;
+}
+
+#carousel-ellos img {
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+}
+
+#carousel-ellos img.active {
+    opacity: 1;
+}
+
 .carousel-title {
     font-family: var(--font-title);
     font-size: 1.5rem;
@@ -473,9 +500,11 @@ body {
     position: relative;
     z-index: 10;
     width: 100%;
-    border-radius: 12px;
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    background-color: #fff;
 }
 
 .map-container iframe {

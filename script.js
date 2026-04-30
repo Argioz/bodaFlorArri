@@ -49,6 +49,25 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(element);
     });
 
+    // Inicializar carruseles activos
+    updateActiveImage('carousel-hero');
+    updateActiveImage('carousel-ellas');
+    updateActiveImage('carousel-ellos');
+
+    // Agregar listeners para scroll manual en carruseles
+    const carouselHero = document.getElementById('carousel-hero');
+    if (carouselHero) {
+        carouselHero.addEventListener('scroll', () => updateActiveImage('carousel-hero'));
+    }
+    const carouselEllas = document.getElementById('carousel-ellas');
+    if (carouselEllas) {
+        carouselEllas.addEventListener('scroll', () => updateActiveImage('carousel-ellas'));
+    }
+    const carouselEllos = document.getElementById('carousel-ellos');
+    if (carouselEllos) {
+        carouselEllos.addEventListener('scroll', () => updateActiveImage('carousel-ellos'));
+    }
+
     const eventDate = new Date("Apr 03, 2027 18:00:00").getTime();
 
     const updateCountdown = setInterval(() => {
@@ -174,6 +193,30 @@ function moveCarousel(id, direction) {
             behavior: 'smooth'
         });
     }
+
+    // Actualizar imagen activa después del movimiento
+    setTimeout(() => {
+        updateActiveImage(id);
+    }, 300);
+}
+
+function updateActiveImage(id) {
+    const container = document.getElementById(id);
+    if (!container) return;
+    const images = container.querySelectorAll('img');
+    const scrollLeft = container.scrollLeft;
+    const containerWidth = container.clientWidth;
+    const center = scrollLeft + containerWidth / 2;
+    
+    images.forEach((img, index) => {
+        const imgLeft = index * containerWidth;
+        const imgRight = (index + 1) * containerWidth;
+        if (center >= imgLeft && center < imgRight) {
+            img.classList.add('active');
+        } else {
+            img.classList.remove('active');
+        }
+    });
 }
 
 /* Nota: Asegúrate de añadir los IDs ('carousel-hero', 'carousel-ellas', 'carousel-ellos') 

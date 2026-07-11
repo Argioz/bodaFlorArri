@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dividir Cuenta</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Inter, Segoe UI, Roboto, sans-serif;
+        }
+
+        :root {
+            --bg: #15171c;
+            --card: #20232a;
+            --card2: #2a2e36;
+            --primary: #5b8cff;
+            --primaryHover: #77a0ff;
+            --danger: #d9534f;
+            --text: #f4f4f4;
+            --secondary: #bbbbbb;
+            --border: #3b3f46;
+            --success: #2ecc71;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            padding: 40px 15px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--secondary);
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 12px 30px rgba(0,0,0,.25);
+            margin-bottom: 20px;
+        }
+
+        .inputs {
+            display: grid;
+            grid-template-columns: 2fr 1fr auto;
+            gap: 12px;
+        }
+
+        input {
+            background: var(--card2);
+            color: white;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 15px;
+            transition: .2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        button {
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: .2s;
+            font-weight: bold;
+        }
+
+        #btnAgregar {
+            background: var(--primary);
+            color: white;
+            padding: 0 18px;
+        }
+
+        #btnAgregar:hover {
+            background: var(--primaryHover);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        thead {
+            background: var(--card2);
+        }
+
+        th {
+            padding: 14px;
+            text-align: left;
+        }
+
+        td {
+            padding: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sinPersonas {
+            color: var(--secondary);
+            text-align: center;
+            padding: 35px;
+        }
+
+        .btnEliminar {
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            background: var(--danger);
+            color: white;
+            font-size: 18px;
+        }
+
+        .acciones {
+            display: flex;
+            justify-content: center;
+            margin-top: 25px;
+        }
+
+        #btnCalcular {
+            background: var(--success);
+            color: white;
+            font-size: 17px;
+            padding: 15px 35px;
+        }
+
+        #btnCalcular:hover {
+            transform: scale(1.03);
+        }
+
+        /* =========================
+            MODAL
+        ==========================*/
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modalContent {
+            background: var(--card);
+            width: 100%;
+            max-width: 600px;
+            border-radius: 15px;
+            padding: 25px;
+            animation: aparecer .25s;
+        }
+
+        @keyframes aparecer {
+            from {
+                opacity: 0;
+                transform: scale(.92);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .resultadoLista {
+            margin: 25px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .resultadoItem {
+            background: var(--card2);
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .modalButtons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .modalButtons button {
+            padding: 11px 20px;
+        }
+
+        #btnCopiar {
+            background: var(--primary);
+            color: white;
+        }
+
+        #btnCerrar {
+            background: #666;
+            color: white;
+        }
+
+        @media(max-width:650px){
+
+            .inputs{
+                grid-template-columns:1fr;
+            }
+
+            #btnAgregar{
+                padding:14px;
+            }
+
+            table{
+                font-size:14px;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>💸 Cuentas claras</h1>
+
+    <p class="subtitle">
+        Agrega todas las personas y cuánto pagó cada una.
+    </p>
+
+    <div class="card">
+
+        <div class="inputs">
+
+            <input
+                id="nombre"
+                type="text"
+                placeholder="Nombre de la persona">
+
+            <input
+                id="gasto"
+                type="number"
+                min="0"
+                step="0.01"
+                placeholder="Monto">
+
+            <button id="btnAgregar">
+                Agregar
+            </button>
+
+        </div>
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Persona</th>
+                    <th>Gastó</th>
+                    <th></th>
+                </tr>
+
+            </thead>
+
+            <tbody id="tablaPersonas">
+
+                <tr id="sinDatos">
+                    <td colspan="3" class="sinPersonas">
+                        Todavía no agregaste ninguna persona.
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+        <div class="acciones">
+
+            <button id="btnCalcular">
+                Calcular división
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="modal" id="modalResultado">
+
+    <div class="modalContent">
+
+        <h2>Resultado</h2>
+
+        <div
+            class="resultadoLista"
+            id="resultadoLista">
+        </div>
+
+        <div class="modalButtons">
+
+            <button id="btnCopiar">
+                Copiar resultado
+            </button>
+
+            <button id="btnCerrar">
+                Cerrar
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+// =============================
+// ESTADO DE LA APLICACIÓN
+// =============================
+
+const personas = [];
+
+const nombreInput = document.getElementById("nombre");
+const gastoInput = document.getElementById("gasto");
+
+const tabla = document.getElementById("tablaPersonas");
+
+const btnAgregar = document.getElementById("btnAgregar");
+const btnCalcular = document.getElementById("btnCalcular");
+
+const modal = document.getElementById("modalResultado");
+const resultadoLista = document.getElementById("resultadoLista");
+
+const btnCerrar = document.getElementById("btnCerrar");
+const btnCopiar = document.getElementById("btnCopiar");
+
+
+// =============================
+// UTILIDADES
+// =============================
+
+function formatoDinero(valor) {
+    return "$" + Number(valor).toFixed(2);
+}
+
+function limpiarFormulario() {
+    nombreInput.value = "";
+    gastoInput.value = "";
+    nombreInput.focus();
+}
+
+
+// =============================
+// TABLA
+// =============================
+
+function renderTabla() {
+
+    tabla.innerHTML = "";
+
+    if (personas.length === 0) {
+
+        tabla.innerHTML = `
+            <tr>
+                <td colspan="3" class="sinPersonas">
+                    Todavía no agregaste ninguna persona.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    personas.forEach((persona, indice) => {
+
+        const fila = document.createElement("tr");
+
+        fila.innerHTML = `
+            <td>${persona.nombre}</td>
+            <td>${formatoDinero(persona.gasto)}</td>
+            <td style="width:55px;">
+                <button
+                    class="btnEliminar"
+                    data-index="${indice}"
+                    title="Eliminar participante">
+                    ✕
+                </button>
+            </td>
+        `;
+
+        tabla.appendChild(fila);
+
+    });
+
+    document
+        .querySelectorAll(".btnEliminar")
+        .forEach(boton => {
+
+            boton.onclick = () => {
+
+                personas.splice(
+                    Number(boton.dataset.index),
+                    1
+                );
+
+                renderTabla();
+
+            };
+
+        });
+
+}
+
+
+// =============================
+// AGREGAR PERSONA
+// =============================
+
+function agregarPersona() {
+
+    const nombre = nombreInput.value.trim();
+
+    const gasto = Number(gastoInput.value);
+
+    if (nombre === "") {
+
+        alert("Ingresa un nombre.");
+
+        nombreInput.focus();
+
+        return;
+    }
+
+    if (isNaN(gasto) || gasto < 0) {
+
+        alert("Ingresa un gasto válido.");
+
+        gastoInput.focus();
+
+        return;
+    }
+
+    personas.push({
+
+        nombre,
+
+        gasto
+
+    });
+
+    renderTabla();
+
+    limpiarFormulario();
+
+}
+
+
+// =============================
+// EVENTOS
+// =============================
+
+btnAgregar.addEventListener(
+    "click",
+    agregarPersona
+);
+
+nombreInput.addEventListener("keydown", e => {
+
+    if (e.key === "Enter") {
+
+        agregarPersona();
+
+    }
+
+});
+
+gastoInput.addEventListener("keydown", e => {
+
+    if (e.key === "Enter") {
+
+        agregarPersona();
+
+    }
+
+});
+
+btnCerrar.addEventListener("click", () => {
+
+    modal.classList.remove("show");
+
+});
+
+modal.addEventListener("click", e => {
+
+    if (e.target === modal) {
+
+        modal.classList.remove("show");
+
+    }
+
+});
+// =============================
+// CÁLCULO DE TRANSFERENCIAS
+// =============================
+
+function calcularTransferencias() {
+
+    if (personas.length < 2) {
+        alert("Debes agregar al menos dos personas.");
+        return;
+    }
+
+    const total = personas.reduce((suma, p) => suma + p.gasto, 0);
+    const promedio = total / personas.length;
+
+    const deudores = [];
+    const acreedores = [];
+
+    personas.forEach(persona => {
+
+        const diferencia = Number((persona.gasto - promedio).toFixed(2));
+
+        if (diferencia < -0.01) {
+
+            deudores.push({
+                nombre: persona.nombre,
+                monto: Math.abs(diferencia)
+            });
+
+        } else if (diferencia > 0.01) {
+
+            acreedores.push({
+                nombre: persona.nombre,
+                monto: diferencia
+            });
+
+        }
+
+    });
+
+    let i = 0;
+    let j = 0;
+
+    const movimientos = [];
+
+    while (i < deudores.length && j < acreedores.length) {
+
+        const pago = Math.min(
+            deudores[i].monto,
+            acreedores[j].monto
+        );
+
+        movimientos.push({
+            desde: deudores[i].nombre,
+            hacia: acreedores[j].nombre,
+            monto: pago
+        });
+
+        deudores[i].monto =
+            Number((deudores[i].monto - pago).toFixed(2));
+
+        acreedores[j].monto =
+            Number((acreedores[j].monto - pago).toFixed(2));
+
+        if (deudores[i].monto <= 0.01) i++;
+        if (acreedores[j].monto <= 0.01) j++;
+
+    }
+
+    mostrarResultado(
+        movimientos,
+        total,
+        promedio
+    );
+
+}
+
+
+// =============================
+// RESULTADO
+// =============================
+
+function mostrarResultado(
+    movimientos,
+    total,
+    promedio
+){
+
+    resultadoLista.innerHTML = "";
+
+    const resumen = document.createElement("div");
+
+    resumen.className = "resultadoItem";
+
+    resumen.innerHTML = `
+        <strong>Total gastado:</strong> ${formatoDinero(total)}<br>
+        <strong>Cada persona debería pagar:</strong> ${formatoDinero(promedio)}
+    `;
+
+    resultadoLista.appendChild(resumen);
+
+    if (movimientos.length === 0) {
+
+        const item = document.createElement("div");
+
+        item.className = "resultadoItem";
+
+        item.innerHTML =
+            "🎉 Todos gastaron exactamente lo mismo.";
+
+        resultadoLista.appendChild(item);
+
+    } else {
+
+        movimientos.forEach(m => {
+
+            const item = document.createElement("div");
+
+            item.className = "resultadoItem";
+
+            item.innerHTML =
+                `<strong>${m.desde}</strong> debe pagar <strong>${formatoDinero(m.monto)}</strong> a <strong>${m.hacia}</strong>.`;
+
+            resultadoLista.appendChild(item);
+
+        });
+
+    }
+
+    modal.classList.add("show");
+
+}
+
+
+// =============================
+// COPIAR RESULTADO
+// =============================
+
+btnCopiar.addEventListener("click", async () => {
+
+    let texto = "";
+
+    resultadoLista
+        .querySelectorAll(".resultadoItem")
+        .forEach(item => {
+
+            texto += item.innerText + "\n";
+
+        });
+
+    try {
+
+        await navigator.clipboard.writeText(texto);
+
+        btnCopiar.textContent = "¡Copiado!";
+
+        setTimeout(() => {
+
+            btnCopiar.textContent = "Copiar resultado";
+
+        }, 1800);
+
+    } catch {
+
+        alert("No fue posible copiar el resultado.");
+
+    }
+
+});
+
+
+// =============================
+// CALCULAR
+// =============================
+
+btnCalcular.addEventListener(
+    "click",
+    calcularTransferencias
+);
+
+
+// =============================
+// INICIO
+// =============================
+
+renderTabla();
+
+</script>
+
+</body>
+</html>

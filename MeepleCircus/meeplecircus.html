@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="theme-color" content="#151024">
+	<title>Meeple Circus — La función comienza</title>
+	<style>
+		:root {
+			color-scheme: dark;
+			--ink: #171126;
+			--night: #100d1b;
+			--panel: rgba(34, 27, 51, .82);
+			--muted: #b7aec8;
+			--pink: #ff6f91;
+			--gold: #ffd166;
+			--mint: #75e0c1;
+			--line: rgba(255, 255, 255, .12);
+		}
+
+		* { box-sizing: border-box; }
+
+		body {
+			min-width: 320px;
+			min-height: 100vh;
+			margin: 0;
+			overflow-x: hidden;
+			color: #fff9f0;
+			font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+			background:
+				radial-gradient(ellipse at 50% -20%, rgba(255, 111, 145, .26), transparent 48%),
+				radial-gradient(circle at 8% 72%, rgba(117, 224, 193, .09), transparent 26%),
+				var(--night);
+		}
+
+		body::before {
+			position: fixed;
+			z-index: -1;
+			inset: 0;
+			pointer-events: none;
+			content: "";
+			opacity: .19;
+			background-image: radial-gradient(rgba(255,255,255,.45) .8px, transparent .8px);
+			background-size: 31px 31px;
+			mask-image: linear-gradient(to bottom, black, transparent 82%);
+		}
+
+		button, input { font: inherit; }
+		button { color: inherit; }
+		.page-shell { width: min(100% - 28px, 500px); margin: 0 auto; }
+
+		.topbar { display: flex; align-items: center; justify-content: space-between; min-height: 88px; border-bottom: 1px solid var(--line); }
+		.brand { display: flex; align-items: center; gap: 12px; font-weight: 850; letter-spacing: -.04em; }
+		.brand-mark { display: block; width: 48px; height: 48px; object-fit: contain; }
+		.brand-name { font-size: 17px; }
+		.brand-name span { color: var(--pink); }
+		.top-note { display: flex; align-items: center; gap: 9px; color: var(--muted); font-size: 12px; font-weight: 700; letter-spacing: .11em; text-transform: uppercase; }
+		.live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 14px var(--mint); }
+
+		main { padding: 22px 0 36px; }
+		.category-section { margin: 0 0 18px; }
+		.category-heading { margin: 0 0 11px 2px; color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+		.category-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+		.category-card { display: flex; min-height: 64px; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 16px; color: #e8e1ee; background: rgba(255, 255, 255, .045); cursor: pointer; opacity: .55; text-align: left; transition: opacity .2s, transform .2s, background .2s, border-color .2s, box-shadow .2s; }
+		.category-card:hover { opacity: .82; transform: translateY(-1px); }
+		.category-card[aria-pressed="true"] { border-color: rgba(255, 209, 102, .7); color: #fff9f0; background: linear-gradient(135deg, rgba(255, 209, 102, .18), rgba(255, 111, 145, .14)); box-shadow: 0 0 22px rgba(255, 209, 102, .13), inset 0 0 0 1px rgba(255, 209, 102, .12); opacity: 1; }
+		.category-emoji { font-size: 23px; }
+		.category-name { font-size: 13px; font-weight: 850; }
+		.speed-section { margin: -5px 0 18px; }
+		.speed-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+		.speed-card { display: flex; min-height: 58px; align-items: center; gap: 9px; padding: 9px 11px; border: 1px solid rgba(117, 224, 193, .24); border-radius: 15px; color: #c9c1d2; background: rgba(117, 224, 193, .035); cursor: pointer; opacity: .55; text-align: left; transition: opacity .2s, transform .2s, background .2s, border-color .2s, box-shadow .2s; }
+		.speed-card:hover { opacity: .82; transform: translateY(-1px); }
+		.speed-card[aria-pressed="true"] { border-color: rgba(117, 224, 193, .72); color: #e2fff5; background: linear-gradient(135deg, rgba(117, 224, 193, .18), rgba(117, 224, 193, .08)); box-shadow: 0 0 20px rgba(117, 224, 193, .13), inset 0 0 0 1px rgba(117, 224, 193, .1); opacity: 1; }
+		.speed-emoji { font-size: 21px; }
+		.speed-name { display: block; font-size: 11px; font-weight: 850; line-height: 1.25; }
+		.speed-rate { display: block; margin-top: 3px; color: #9ee9d1; font-size: 10px; font-weight: 750; }
+		.player-layout { overflow: hidden; border: 1px solid rgba(255, 255, 255, .14); border-radius: 23px; background: linear-gradient(145deg, rgba(43, 33, 60, .96), rgba(24, 19, 37, .98)); box-shadow: 0 22px 60px rgba(0, 0, 0, .34), 0 0 45px rgba(255, 111, 145, .07); }
+		.now-playing { padding: 19px; }
+		.section-label { display: flex; align-items: center; gap: 9px; color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+		.section-label .spark { color: var(--gold); font-size: 17px; }
+		.artwork { position: relative; display: grid; min-height: 145px; margin: 0 0 19px; overflow: hidden; place-items: center; border: 1px solid rgba(255, 255, 255, .14); border-radius: 18px; background: radial-gradient(ellipse at 50% 110%, rgba(255, 209, 102, .27), transparent 42%), repeating-conic-gradient(from -15deg at 50% 100%, rgba(255, 111, 145, .13) 0deg 12deg, transparent 12deg 24deg), linear-gradient(160deg, #382849, #1a1426 70%); }
+		.artwork::before, .artwork::after { position: absolute; width: 7px; height: 7px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 18px var(--gold); content: ""; }
+		.artwork::before { top: 22%; left: 22%; }
+		.artwork::after { top: 34%; right: 19%; width: 5px; height: 5px; background: var(--mint); box-shadow: 0 0 16px var(--mint); }
+		.tent-icon { position: relative; z-index: 1; color: var(--gold); filter: drop-shadow(0 8px 22px rgba(255, 209, 102, .2)); font-size: clamp(78px, 13vw, 128px); line-height: 1; transform: translateY(-2px); }
+		.artwork-caption { position: absolute; right: 16px; bottom: 15px; left: 16px; display: flex; align-items: center; justify-content: space-between; color: rgba(255, 249, 240, .7); font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+		.track-meta { min-width: 0; }
+		.track-kicker { margin: 0 0 7px; color: var(--pink); font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+		.track-title { margin: 0; overflow: hidden; font-family: Georgia, "Times New Roman", serif; font-size: clamp(25px, 4vw, 34px); font-weight: 700; letter-spacing: -.035em; text-overflow: ellipsis; white-space: nowrap; }
+		.track-subtitle { margin: 7px 0 0; color: var(--muted); font-size: 13px; }
+		.timeline { margin-top: 24px; }
+		.progress { width: 100%; height: 6px; margin: 0; appearance: none; border-radius: 99px; outline: none; background: linear-gradient(to right, var(--pink) 0%, var(--pink) var(--progress, 0%), rgba(255, 255, 255, .18) var(--progress, 0%), rgba(255, 255, 255, .18) 100%); cursor: pointer; }
+		.progress::-webkit-slider-thumb { width: 13px; height: 13px; appearance: none; border: 2px solid #fff; border-radius: 50%; background: var(--pink); box-shadow: 0 0 12px rgba(255, 111, 145, .7); }
+		.progress::-moz-range-thumb { width: 10px; height: 10px; border: 2px solid #fff; border-radius: 50%; background: var(--pink); box-shadow: 0 0 12px rgba(255, 111, 145, .7); }
+		.time-row { display: flex; justify-content: space-between; margin-top: 8px; color: #a9a1b7; font-size: 11px; font-variant-numeric: tabular-nums; }
+		.controls { display: flex; flex-direction: column; align-items: stretch; justify-content: center; gap: 10px; margin-top: 17px; }
+		.utility-button, .play-button, .track-button { border: 0; cursor: pointer; }
+		.play-button { display: flex; width: 100%; min-height: 56px; align-items: center; justify-content: center; gap: 10px; border-radius: 16px; color: #25172a; background: linear-gradient(135deg, #ffd978, #ffb7a3); box-shadow: 0 8px 28px rgba(255, 183, 163, .2); font-size: 15px; font-weight: 850; transition: transform .2s, box-shadow .2s; }
+		.play-button:hover { box-shadow: 0 12px 34px rgba(255, 183, 163, .32); transform: translateY(-2px); }
+		.play-button:active { transform: translateY(0) scale(.98); }
+		.play-icon { font-size: 16px; }
+		.shuffle-button { display: flex; width: 100%; min-height: 62px; align-items: center; justify-content: center; gap: 10px; border: 1px solid rgba(117, 224, 193, .42); border-radius: 16px; color: #c9ffed; background: linear-gradient(135deg, rgba(117, 224, 193, .16), rgba(117, 224, 193, .07)); box-shadow: 0 7px 24px rgba(117, 224, 193, .08); cursor: pointer; font-size: 15px; font-weight: 850; transition: background .2s, box-shadow .2s, transform .2s; }
+		.shuffle-button:hover { background: rgba(117, 224, 193, .22); box-shadow: 0 10px 30px rgba(117, 224, 193, .16); transform: translateY(-2px); }
+		.shuffle-button:active { transform: scale(.98); }
+
+		.queue { display: flex; flex-direction: column; border-top: 1px solid var(--line); background: rgba(12, 10, 21, .25); }
+		.queue-header { display: flex; align-items: center; justify-content: space-between; padding: 17px 17px 10px; }
+		.queue-header h2 { margin: 0; font-size: 14px; font-weight: 800; letter-spacing: .01em; }
+		.track-count { padding: 5px 9px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: 10px; font-weight: 700; }
+		.track-list { max-height: 35vh; min-height: 130px; overflow-y: auto; padding: 0 9px 11px; scrollbar-color: rgba(255,255,255,.2) transparent; scrollbar-width: thin; }
+		.track-button { display: grid; width: 100%; grid-template-columns: 34px minmax(0, 1fr) 28px; align-items: center; gap: 11px; padding: 12px 13px; border: 1px solid transparent; border-radius: 13px; text-align: left; background: transparent; transition: background .2s, border-color .2s; }
+		.track-button:hover { background: rgba(255,255,255,.055); }
+		.track-button[aria-current="true"] { border-color: rgba(255, 111, 145, .2); background: rgba(255, 111, 145, .09); }
+		.track-number { color: #8e859e; font-size: 11px; font-variant-numeric: tabular-nums; text-align: center; }
+		.track-button[aria-current="true"] .track-number { color: var(--pink); }
+		.track-text { min-width: 0; }
+		.track-name { display: block; overflow: hidden; color: #f5eff9; font-size: 12px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+		.track-indicator { color: var(--pink); font-size: 13px; text-align: center; }
+		.track-button:not([aria-current="true"]) .track-indicator { color: #80768f; }
+		.footer-note { margin: 15px 0 0; color: #8f879c; font-size: 11px; line-height: 1.6; text-align: center; }
+		.footer-note span { color: var(--gold); }
+		.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; clip-path: inset(50%); border: 0; }
+		button:focus-visible, input:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+
+		@media (max-width: 380px) {
+			.page-shell { width: min(100% - 22px, 500px); }
+			.category-card { min-height: 58px; gap: 7px; padding: 8px 9px; }
+			.category-name { font-size: 12px; }
+			.now-playing { padding: 15px; }
+		}
+		@media (prefers-reduced-motion: reduce) {
+			*, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+		}
+	</style>
+</head>
+<body>
+	<div class="page-shell">
+		<header class="topbar">
+			<div class="brand" aria-label="Meeple Circus">
+				<img class="brand-mark" src="./MeepleCircusLogo.png" alt="" aria-hidden="true">
+				<div class="brand-name">MEEPLE <span>CIRCUS</span></div>
+			</div>
+		</header>
+
+		<main>
+			<section class="category-section" aria-labelledby="category-heading">
+				<h1 class="category-heading" id="category-heading">Elige una categoría</h1>
+				<div class="category-grid" id="category-grid">
+					<button class="category-card" type="button" data-category="themes" aria-pressed="false"><span class="category-emoji" aria-hidden="true">🎪</span><span class="category-name">Themes</span></button>
+					<button class="category-card" type="button" data-category="classic" aria-pressed="true"><span class="category-emoji" aria-hidden="true">🎩</span><span class="category-name">Classic</span></button>
+					<button class="category-card" type="button" data-category="challenges" aria-pressed="false"><span class="category-emoji" aria-hidden="true">🎯</span><span class="category-name">Challenges</span></button>
+					<button class="category-card" type="button" data-category="director" aria-pressed="false"><span class="category-emoji" aria-hidden="true">🎬</span><span class="category-name">Director</span></button>
+				</div>
+			</section>
+			<section class="speed-section" aria-labelledby="speed-heading">
+				<h2 class="category-heading" id="speed-heading">Modos de velocidad</h2>
+				<div class="speed-grid" id="speed-grid">
+					<button class="speed-card" type="button" data-rate="2" aria-pressed="false" aria-label="Activar Quick Time, velocidad doble y duración a la mitad">
+						<span class="speed-emoji" aria-hidden="true">⏩</span><span><span class="speed-name">Quick Time</span><span class="speed-rate">×2 · mitad de duración</span></span>
+					</button>
+					<button class="speed-card" type="button" data-rate="4" aria-pressed="false" aria-label="Activar No Rest For The Rigid, velocidad cuádruple y duración a un cuarto">
+						<span class="speed-emoji" aria-hidden="true">🔥</span><span><span class="speed-name">No Rest For The Rigid</span><span class="speed-rate">×4 · un cuarto de duración</span></span>
+					</button>
+				</div>
+			</section>
+
+			<section class="player-layout" aria-label="Reproductor de música">
+				<div class="now-playing">
+					<div class="artwork" aria-hidden="true">
+						<div class="tent-icon">🎪</div>
+						<div class="artwork-caption"><span>Meeple Circus</span><span>♪ &nbsp; pista en directo</span></div>
+					</div>
+
+					<div class="track-meta" aria-live="polite">
+						<p class="track-kicker">La pista seleccionada</p>
+						<h2 class="track-title" id="current-title">MC Theme</h2>
+						<p class="track-subtitle">Banda sonora original · Meeple Circus</p>
+					</div>
+
+					<div class="timeline">
+						<label class="sr-only" for="progress">Progreso de la canción</label>
+						<input class="progress" id="progress" type="range" min="0" max="1000" value="0" aria-label="Progreso de la canción">
+						<div class="time-row"><span id="current-time">0:00</span><span id="duration">0:00</span></div>
+					</div>
+
+					<div class="controls">
+						<button class="shuffle-button" id="shuffle-button" type="button" aria-label="Reproducir una canción aleatoria de Classic">
+							<span aria-hidden="true">⤨</span><span>Reproducción aleatoria</span>
+						</button>
+						<button class="play-button" id="play-button" type="button" aria-label="Reproducir">
+							<span class="play-icon" id="play-icon" aria-hidden="true">▶</span>
+							<span id="play-label">Reproducir</span>
+						</button>
+					</div>
+					  <p class="footer-note" id="player-message" aria-live="polite"><span>✦</span> Elige una pista de la lista o pulsa reproducir para empezar.</p>
+					<audio id="audio" preload="metadata"></audio>
+				</div>
+
+				<aside class="queue" aria-labelledby="queue-title">
+					<div class="queue-header">
+						<h2 id="queue-title">La lista de la función</h2>
+						<span class="track-count" id="track-count">0 pistas</span>
+					</div>
+					<div class="track-list" id="track-list" role="list" aria-label="Canciones disponibles"></div>
+				</aside>
+			</section>
+		</main>
+	</div>
+
+	<script>
+		const tracks = [
+			{ file: 'MC-Theme.mp3', title: 'Theme', category: 'classic' },
+			{ file: 'MC-Carnival Circus.mp3', title: 'Carnival Circus', category: 'themes' },
+			{ file: 'MC-Cartoon Circus.mp3', title: 'Cartoon Circus', category: 'themes' },
+			{ file: 'MC-Challenge Singing.mp3', title: 'Karaoke', category: 'challenges' },
+			{ file: 'MC-Challenge_Applause.mp3', title: 'Thank you / Merci', category: 'challenges' },
+			{ file: 'MC-Challenge_Applause (1).mp3', title: 'I love you', category: 'challenges' },
+			{ file: 'MC-Challenge_Raleur.mp3', title: 'Moaner / Râleur', category: 'challenges' },
+			{ file: 'MC-Comedy klezmer circus.mp3', title: 'Comedy Klezmer Circus', category: 'themes', duration: 102 },
+			{ file: 'MC-East-West-Rag.mp3', title: 'East West Rag', category: 'classic' },
+			{ file: 'MC-Metal Circus.mp3', title: 'Metal Circus', category: 'themes' },
+			{ file: 'MC-Nuts.mp3', title: 'Nuts', category: 'classic' },
+			{ file: 'MC-On_accelere_1er.mp3', title: 'On accélère · 1er tour', category: 'director' },
+			{ file: 'MC-On_accelere_2e.mp3', title: 'On accélère · 2e tour', category: 'director' },
+			{ file: 'MC-Retrogaming Circus.mp3', title: 'Retrogaming Circus', category: 'themes' },
+			{ file: 'MC_I_love_winter.mp3', title: 'I Love Winter', category: 'themes' },
+			{ file: 'MC_Jingle_Bells_Circus.mp3', title: 'Jingle Bells Circus', category: 'themes' }
+		];
+
+		const audio = document.getElementById('audio');
+		const list = document.getElementById('track-list');
+		const playButton = document.getElementById('play-button');
+		const playLabel = document.getElementById('play-label');
+		const playIcon = document.getElementById('play-icon');
+		const progress = document.getElementById('progress');
+		const currentTime = document.getElementById('current-time');
+		const duration = document.getElementById('duration');
+		const shuffleButton = document.getElementById('shuffle-button');
+		let activeCategory = 'classic';
+		let visibleTracks = tracks.filter(track => track.category === activeCategory);
+		let currentIndex = 0;
+		let isSeeking = false;
+		let speedMultiplier = 1;
+
+		function getTrackDuration() {
+			return visibleTracks[currentIndex].duration ?? audio.duration;
+		}
+
+		function updateTiming() {
+			const trackDuration = getTrackDuration();
+			const durationInPlaybackTime = trackDuration / speedMultiplier;
+			const currentTimeInPlaybackTime = audio.currentTime / speedMultiplier;
+			const ratio = trackDuration ? audio.currentTime / trackDuration : 0;
+			duration.textContent = formatTime(durationInPlaybackTime);
+			currentTime.textContent = formatTime(currentTimeInPlaybackTime);
+			progress.value = String(Math.round(ratio * Number(progress.max)));
+			progress.style.setProperty('--progress', `${ratio * 100}%`);
+		}
+
+		function formatTime(seconds) {
+			if (!Number.isFinite(seconds)) return '0:00';
+			const minutes = Math.floor(seconds / 60);
+			const remainingSeconds = Math.floor(seconds % 60).toString().padStart(2, '0');
+			return `${minutes}:${remainingSeconds}`;
+		}
+
+		function renderTracks() {
+			document.getElementById('track-count').textContent = `${visibleTracks.length} pistas`;
+			list.replaceChildren(...visibleTracks.map((track, index) => {
+				const item = document.createElement('div');
+				item.setAttribute('role', 'listitem');
+				const button = document.createElement('button');
+				button.className = 'track-button';
+				button.type = 'button';
+				button.setAttribute('aria-current', index === currentIndex ? 'true' : 'false');
+				button.setAttribute('aria-label', `Reproducir ${track.title}`);
+				button.innerHTML = `<span class="track-number">${String(index + 1).padStart(2, '0')}</span><span class="track-text"><span class="track-name"></span></span><span class="track-indicator" aria-hidden="true">${index === currentIndex ? '♫' : '♪'}</span>`;
+				button.querySelector('.track-name').textContent = track.title;
+				button.addEventListener('click', () => loadTrack(index, true));
+				item.append(button);
+				return item;
+			}));
+		}
+
+		function updatePlayState(isPlaying) {
+			playIcon.textContent = isPlaying ? 'Ⅱ' : '▶';
+			playLabel.textContent = isPlaying ? 'Pausar' : 'Reproducir';
+			playButton.setAttribute('aria-label', isPlaying ? 'Pausar' : 'Reproducir');
+		}
+
+		function resolveTrackUrl(file) {
+			const filename = file.split(/[\\/]/).pop();
+			return new URL(filename, document.baseURI).href;
+		}
+
+		function loadTrack(index, autoplay = false) {
+			currentIndex = (index + visibleTracks.length) % visibleTracks.length;
+			const track = visibleTracks[currentIndex];
+			audio.src = resolveTrackUrl(track.file);
+			audio.playbackRate = speedMultiplier;
+			document.getElementById('current-title').textContent = track.title;
+			document.getElementById('player-message').innerHTML = '<span>✦</span> Elige una pista de la lista o pulsa reproducir para empezar.';
+			currentTime.textContent = '0:00';
+			duration.textContent = '0:00';
+			progress.value = '0';
+			progress.style.setProperty('--progress', '0%');
+			renderTracks();
+			if (autoplay) audio.play().catch(() => updatePlayState(false));
+			else updatePlayState(false);
+		}
+
+		function playNext() {
+			loadTrack(currentIndex + 1, true);
+		}
+
+		document.querySelectorAll('.category-card').forEach(card => {
+			card.addEventListener('click', () => {
+				activeCategory = card.dataset.category;
+				visibleTracks = tracks.filter(track => track.category === activeCategory);
+				document.querySelectorAll('.category-card').forEach(option => option.setAttribute('aria-pressed', String(option === card)));
+				shuffleButton.setAttribute('aria-label', `Reproducir una canción aleatoria de ${card.querySelector('.category-name').textContent}`);
+				loadTrack(0);
+			});
+		});
+		document.querySelectorAll('.speed-card').forEach(card => {
+			card.addEventListener('click', () => {
+				const isAlreadyActive = card.getAttribute('aria-pressed') === 'true';
+				speedMultiplier = isAlreadyActive ? 1 : Number(card.dataset.rate);
+				audio.playbackRate = speedMultiplier;
+				document.querySelectorAll('.speed-card').forEach(option => {
+					option.setAttribute('aria-pressed', String(!isAlreadyActive && option === card));
+				});
+				updateTiming();
+			});
+		});
+
+		playButton.addEventListener('click', () => {
+			if (audio.paused) audio.play().catch(() => updatePlayState(false));
+			else audio.pause();
+		});
+		shuffleButton.addEventListener('click', () => {
+			const randomIndex = visibleTracks.length > 1
+				? (currentIndex + 1 + Math.floor(Math.random() * (visibleTracks.length - 1))) % visibleTracks.length
+				: currentIndex;
+			loadTrack(randomIndex, true);
+		});
+
+		progress.addEventListener('input', () => {
+			isSeeking = true;
+			const ratio = Number(progress.value) / Number(progress.max);
+			progress.style.setProperty('--progress', `${ratio * 100}%`);
+			const trackDuration = getTrackDuration();
+			if (Number.isFinite(trackDuration)) currentTime.textContent = formatTime(ratio * trackDuration / speedMultiplier);
+		});
+		progress.addEventListener('change', () => {
+			const trackDuration = getTrackDuration();
+			if (Number.isFinite(trackDuration)) audio.currentTime = (Number(progress.value) / Number(progress.max)) * trackDuration;
+			isSeeking = false;
+		});
+
+		audio.addEventListener('loadedmetadata', () => {
+			audio.playbackRate = speedMultiplier;
+			updateTiming();
+		});
+		audio.addEventListener('timeupdate', () => {
+			if (isSeeking) return;
+			const trackDuration = getTrackDuration();
+			updateTiming();
+			if (Number.isFinite(trackDuration) && audio.currentTime >= trackDuration && !audio.paused) {
+				audio.pause();
+				playNext();
+			}
+		});
+		audio.addEventListener('play', () => {
+			audio.playbackRate = speedMultiplier;
+			updatePlayState(true);
+		});
+		audio.addEventListener('pause', () => updatePlayState(false));
+		audio.addEventListener('ended', playNext);
+		audio.addEventListener('error', () => {
+			updatePlayState(false);
+			document.getElementById('player-message').textContent = `No se pudo cargar «${visibleTracks[currentIndex].title}». Comprueba que el archivo de audio siga en esta carpeta.`;
+		});
+
+		renderTracks();
+		loadTrack(0);
+	</script>
+</body>
+</html>
